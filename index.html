@@ -4,107 +4,249 @@
     <title>Locksuche</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap" rel="stylesheet">
     <style>
+        :root {
+            /* Light mode variables */
+            --md-primary: #1a73e8;
+            --md-primary-light: #e8f0fe;
+            --md-primary-dark: #1967d2;
+            --md-surface: #ffffff;
+            --md-background: #f8f9fa;
+            --md-on-surface: #202124;
+            --md-on-surface-variant: #5f6368;
+            --md-outline: #dadce0;
+            --md-ripple: rgba(26, 115, 232, 0.1);
+            --md-card-bg: #ffffff;
+            --md-badge-bg: #f1f3f4;
+            --md-badge-text: #5f6368;
+            --md-toast-bg: #323232;
+            --md-toast-text: #ffffff;
+            --md-divider: #dadce0;
+            --md-chip-bg: #f1f3f4;
+            --md-chip-text: #5f6368;
+            --md-chip-active-bg: #e8f0fe;
+            --md-chip-active-text: #1a73e8;
+            --md-header-bg: #ffffff;
+            --md-modal-bg: #ffffff;
+            --md-skeleton-bg: #f1f3f4;
+        }
+        
+        [data-theme="dark"] {
+            /* Dark mode variables */
+            --md-primary: #8ab4f8;
+            --md-primary-light: #334155;
+            --md-primary-dark: #aecbfa;
+            --md-surface: #202124;
+            --md-background: #121212;
+            --md-on-surface: #e8eaed;
+            --md-on-surface-variant: #9aa0a6;
+            --md-outline: #3c4043;
+            --md-ripple: rgba(138, 180, 248, 0.1);
+            --md-card-bg: #2a2a2a;
+            --md-badge-bg: #3c4043;
+            --md-badge-text: #e8eaed;
+            --md-toast-bg: #e8eaed;
+            --md-toast-text: #202124;
+            --md-divider: #3c4043;
+            --md-chip-bg: #3c4043;
+            --md-chip-text: #e8eaed;
+            --md-chip-active-bg: #334155;
+            --md-chip-active-text: #8ab4f8;
+            --md-header-bg: #202124;
+            --md-modal-bg: #2a2a2a;
+            --md-skeleton-bg: #3c4043;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f4f8;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--md-background);
+            color: var(--md-on-surface);
+            -webkit-tap-highlight-color: transparent;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
         
         .lock-card {
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            border-radius: 8px;
+            transition: all 0.2s ease;
+            border-radius: 16px;
+            border: 1px solid var(--md-outline);
+            background-color: var(--md-card-bg);
+            overflow: hidden;
         }
         
-        .lock-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        .lock-card:active {
+            background-color: var(--md-ripple);
         }
         
         .badge {
-            font-size: 0.65rem;
-            border-radius: 6px;
-            padding: 0.15rem 0.5rem;
+            font-size: 0.75rem;
+            border-radius: 16px;
+            padding: 0.15rem 0.6rem;
             font-weight: 500;
-            letter-spacing: 0.02em;
+            background-color: var(--md-badge-bg);
+            color: var(--md-badge-text);
         }
         
         .badge-interpreter {
-            background-color: rgba(59, 130, 246, 0.1);
-            color: #2563eb;
-            border: 1px solid rgba(59, 130, 246, 0.2);
+            background-color: var(--md-chip-bg);
+            color: var(--md-chip-text);
         }
         
         .badge-year {
-            background-color: rgba(16, 185, 129, 0.1);
-            color: #059669;
-            border: 1px solid rgba(16, 185, 129, 0.2);
+            background-color: var(--md-chip-bg);
+            color: var(--md-chip-text);
         }
         
         .badge-category {
-            background-color: rgba(139, 92, 246, 0.1);
-            color: #7c3aed;
-            border: 1px solid rgba(139, 92, 246, 0.2);
+            background-color: var(--md-chip-bg);
+            color: var(--md-chip-text);
+        }
+        
+        [data-theme="light"] .badge-interpreter {
+            background-color: #e6f4ea;
+            color: #137333;
+        }
+        
+        [data-theme="light"] .badge-year {
+            background-color: #e8f0fe;
+            color: #1967d2;
+        }
+        
+        [data-theme="light"] .badge-category {
+            background-color: #f3e8fd;
+            color: #9334e6;
         }
         
         .modal {
-            transition: opacity 0.3s ease;
+            transition: opacity 0.2s ease;
         }
         
         .search-input {
-            background-color: #ffffff;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            color: #374151;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            background-color: var(--md-surface);
+            border: 1px solid var(--md-outline);
+            border-radius: 24px;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            color: var(--md-on-surface);
         }
         
         .search-input:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+            border-color: var(--md-primary);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            outline: none;
+        }
+        
+        .filter-input {
+            background-color: var(--md-surface);
+            border: 1px solid var(--md-outline);
+            border-radius: 20px;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            color: var(--md-on-surface);
+            height: 40px;
+        }
+        
+        .filter-input:focus {
+            border-color: var(--md-primary);
             outline: none;
         }
         
         .tab-active {
-            border-bottom: 2px solid #3b82f6;
-            color: #3b82f6;
+            color: var(--md-primary);
+            font-weight: 500;
+        }
+        
+        .tab-active::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 3px;
+            background-color: var(--md-primary);
+            border-radius: 3px 3px 0 0;
+            margin-top: 8px;
         }
         
         .favorite-button {
-            transition: color 0.2s ease;
+            transition: all 0.2s ease;
+            height: 40px;
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+        }
+        
+        .favorite-button:active {
+            background-color: var(--md-ripple);
         }
         
         .favorite-button.active {
-            color: #f59e0b;
+            color: #f5b400;
         }
         
         .btn-primary {
-            background-color: #3b82f6;
-            color: white;
-            border-radius: 8px;
-            transition: background-color 0.2s ease, transform 0.1s ease;
+            background-color: var(--md-primary);
+            color: var(--md-surface);
+            border-radius: 20px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            padding: 0.5rem 1.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            font-size: 0.875rem;
         }
         
-        .btn-primary:hover {
-            background-color: #2563eb;
-            transform: translateY(-1px);
+        .btn-primary:active {
+            background-color: var(--md-primary-dark);
         }
         
         .btn-secondary {
-            background-color: #f3f4f6;
-            color: #374151;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            transition: background-color 0.2s ease, transform 0.1s ease;
+            background-color: var(--md-primary-light);
+            color: var(--md-primary);
+            border-radius: 20px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            padding: 0.5rem 1.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            font-size: 0.875rem;
         }
         
-        .btn-secondary:hover {
-            background-color: #e5e7eb;
-            transform: translateY(-1px);
+        .btn-secondary:active {
+            background-color: var(--md-ripple);
+        }
+        
+        .btn-text {
+            color: var(--md-primary);
+            font-weight: 500;
+            transition: all 0.2s ease;
+            padding: 0.5rem 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            font-size: 0.875rem;
+            border-radius: 20px;
+        }
+        
+        .btn-text:active {
+            background-color: var(--md-ripple);
+        }
+        
+        .btn-icon {
+            height: 40px;
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            color: var(--md-on-surface-variant);
+        }
+        
+        .btn-icon:active {
+            background-color: var(--md-ripple);
         }
         
         .fade-in {
-            animation: fadeIn 0.5s ease forwards;
+            animation: fadeIn 0.3s ease forwards;
             opacity: 0;
         }
         
@@ -114,14 +256,14 @@
         }
         
         .slide-in {
-            animation: slideIn 0.5s ease forwards;
-            transform: translateY(20px);
+            animation: slideIn 0.3s ease forwards;
+            transform: translateY(10px);
             opacity: 0;
         }
         
         @keyframes slideIn {
             from {
-                transform: translateY(20px);
+                transform: translateY(10px);
                 opacity: 0;
             }
             to {
@@ -130,75 +272,58 @@
             }
         }
         
-        .loading-wave {
+        .loading-dots {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 40px;
+            height: 20px;
         }
         
-        .loading-wave .dot {
+        .loading-dots .dot {
             display: inline-block;
-            width: 5px;
-            height: 5px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
-            margin: 0 3px;
-            background-color: #3b82f6;
-            animation: wave 1.5s infinite ease-in-out;
+            margin: 0 4px;
+            background-color: var(--md-primary);
+            animation: pulse 1.5s infinite ease-in-out;
         }
         
-        .loading-wave .dot:nth-child(1) { animation-delay: 0s; }
-        .loading-wave .dot:nth-child(2) { animation-delay: 0.1s; }
-        .loading-wave .dot:nth-child(3) { animation-delay: 0.2s; }
-        .loading-wave .dot:nth-child(4) { animation-delay: 0.3s; }
-        .loading-wave .dot:nth-child(5) { animation-delay: 0.4s; }
+        .loading-dots .dot:nth-child(1) { animation-delay: 0s; }
+        .loading-dots .dot:nth-child(2) { animation-delay: 0.1s; }
+        .loading-dots .dot:nth-child(3) { animation-delay: 0.2s; }
         
-        @keyframes wave {
-            0%, 40%, 100% {
-                transform: translateY(0);
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.5;
             }
-            20% {
-                transform: translateY(-10px);
+            50% {
+                transform: scale(1.5);
+                opacity: 1;
             }
-        }
-        
-        /* Year Logo Styles */
-        .year-logo {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #60a5fa, #3b82f6);
-            color: white;
-            font-size: 10px;
-            font-weight: bold;
-            margin-right: 6px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         /* Category Pills */
         .category-pill {
             display: inline-flex;
             align-items: center;
-            padding: 0.15rem 0.5rem;
-            border-radius: 12px;
-            font-size: 0.65rem;
+            padding: 0.15rem 0.6rem;
+            border-radius: 16px;
+            font-size: 0.75rem;
             font-weight: 500;
-            margin-right: 4px;
+            background-color: var(--md-chip-bg);
+            color: var(--md-chip-text);
         }
         
-        .category-lock {
-            background-color: rgba(156, 39, 176, 0.1);
-            color: #7b1fa2;
-            border: 1px solid rgba(156, 39, 176, 0.1);
+        [data-theme="light"] .category-lock {
+            background-color: #f3e8fd;
+            color: #9334e6;
         }
         
-        .category-marsch {
-            background-color: rgba(33, 150, 243, 0.1);
-            color: #1976d2;
-            border: 1px solid rgba(33, 150, 243, 0.1);
+        [data-theme="light"] .category-marsch {
+            background-color: #e8f0fe;
+            color: #1967d2;
         }
         
         /* Action Menu Styles */
@@ -207,37 +332,17 @@
             display: inline-block;
         }
         
-        .action-menu-button {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f3f4f6;
-            color: #374151;
-            border: 1px solid #e5e7eb;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-        
-        .action-menu-button:hover, .action-menu-button:focus {
-            background-color: #e5e7eb;
-            color: #1f2937;
-        }
-        
         .action-menu-content {
             display: none;
             position: absolute;
             right: 0;
-            min-width: 180px;
+            min-width: 200px;
             z-index: 10;
-            background: white;
+            background: var(--md-modal-bg);
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
             overflow: hidden;
             animation: fadeIn 0.2s ease;
-            border: 1px solid #e5e7eb;
         }
         
         .action-menu.active .action-menu-content {
@@ -245,43 +350,82 @@
         }
         
         .action-option {
-            padding: 10px 16px;
+            padding: 12px 16px;
             display: flex;
             align-items: center;
             transition: background 0.2s ease;
-            color: #374151;
+            color: var(--md-on-surface);
+            position: relative;
+            overflow: hidden;
         }
         
-        .action-option:hover {
-            background: #f3f4f6;
+        .action-option:active {
+            background: var(--md-ripple);
         }
         
         .action-option i {
-            margin-right: 12px;
-            width: 16px;
+            margin-right: 16px;
+            width: 24px;
             text-align: center;
+            color: var(--md-on-surface-variant);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .action-option span {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .action-option::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: var(--md-primary);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1) translate(-50%, -50%);
+            transform-origin: 50% 50%;
+        }
+        
+        .action-option:active::after {
+            animation: ripple 0.6s ease-out;
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0) translate(-50%, -50%);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20) translate(-50%, -50%);
+                opacity: 0;
+            }
         }
         
         /* Toast Notification */
         #toast {
             visibility: hidden;
             min-width: 250px;
-            background-color: #333;
-            color: #fff;
+            background-color: var(--md-toast-bg);
+            color: var(--md-toast-text);
             text-align: center;
-            border-radius: 8px;
-            padding: 16px;
+            border-radius: 24px;
+            padding: 12px 24px;
             position: fixed;
             z-index: 1000;
             left: 50%;
             bottom: 30px;
             transform: translateX(-50%);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
         }
         
         #toast.show {
             visibility: visible;
-            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+            animation: fadein 0.3s, fadeout 0.3s 2.5s;
         }
         
         @keyframes fadein {
@@ -293,114 +437,251 @@
             from {bottom: 30px; opacity: 1;}
             to {bottom: 0; opacity: 0;}
         }
+        
+        /* Bottom Sheet Modal */
+        .bottom-sheet {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--md-modal-bg);
+            border-radius: 28px 28px 0 0;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            z-index: 50;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .bottom-sheet.show {
+            transform: translateY(0);
+        }
+        
+        .bottom-sheet-handle {
+            width: 32px;
+            height: 4px;
+            background-color: var(--md-outline);
+            border-radius: 2px;
+            margin: 12px auto;
+        }
+        
+        /* Chip styles */
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--md-chip-bg);
+            border-radius: 16px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.875rem;
+            color: var(--md-chip-text);
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .chip.active {
+            background-color: var(--md-chip-active-bg);
+            color: var(--md-chip-active-text);
+        }
+        
+        .chip .close {
+            margin-left: 6px;
+            font-size: 0.75rem;
+        }
+        
+        /* Select styles */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%235f6368' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 16px;
+            padding-right: 32px !important;
+        }
+        
+        [data-theme="dark"] select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%239aa0a6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        }
+        
+        /* Scrim background */
+        .scrim {
+            background-color: rgba(0, 0, 0, 0.32);
+            backdrop-filter: blur(1px);
+        }
+        
+        [data-theme="dark"] .scrim {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Header elevation */
+        .header-elevated {
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            background-color: var(--md-header-bg);
+        }
+        
+        /* Divider */
+        .divider {
+            height: 1px;
+            background-color: var(--md-divider);
+            width: 100%;
+        }
+        
+        /* Theme toggle */
+        .theme-toggle {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            border-radius: 12px;
+            background-color: var(--md-outline);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .theme-toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--md-surface);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        [data-theme="dark"] .theme-toggle {
+            background-color: var(--md-primary);
+        }
+        
+        [data-theme="dark"] .theme-toggle::after {
+            transform: translateX(24px);
+        }
+        
+        /* Skeleton loading */
+        .skeleton {
+            background-color: var(--md-skeleton-bg);
+            border-radius: 16px;
+            animation: skeleton-pulse 1.5s infinite ease-in-out;
+        }
+        
+        @keyframes skeleton-pulse {
+            0%, 100% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
     </style>
-<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.left-3{left:0.75rem}.top-0{top:0px}.top-1\/2{top:50%}.z-10{z-index:10}.z-50{z-index:50}.mx-4{margin-left:1rem;margin-right:1rem}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:0.25rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.mr-2{margin-right:0.5rem}.mt-1{margin-top:0.25rem}.mt-10{margin-top:2.5rem}.mt-2{margin-top:0.5rem}.mt-3{margin-top:0.75rem}.mt-4{margin-top:1rem}.mb-2{margin-bottom:0.5rem}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-12{height:3rem}.h-4{height:1rem}.h-40{height:10rem}.h-5{height:1.25rem}.max-h-40{max-height:10rem}.min-h-screen{min-height:100vh}.w-12{width:3rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-full{width:100%}.max-w-2xl{max-width:42rem}.max-w-md{max-width:28rem}.flex-1{flex:1 1 0%}.-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.space-x-3 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.75rem * var(--tw-space-x-reverse));margin-left:calc(0.75rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.overflow-auto{overflow:auto}.overflow-hidden{overflow:hidden}.rounded-lg{border-radius:0.5rem}.border-b{border-bottom-width:1px}.border-gray-200{--tw-border-opacity:1;border-color:rgb(229 231 235 / var(--tw-border-opacity, 1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-opacity-30{--tw-bg-opacity:0.3}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.pl-9{padding-left:2.25rem}.pr-3{padding-right:0.75rem}.text-center{text-align:center}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.text-blue-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-green-600{--tw-text-opacity:1;color:rgb(22 163 74 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-gray-900{--tw-text-opacity:1;color:rgb(17 24 39 / var(--tw-text-opacity, 1))}.text-green-500{--tw-text-opacity:1;color:rgb(34 197 94 / var(--tw-text-opacity, 1))}.text-yellow-500{--tw-text-opacity:1;color:rgb(234 179 8 / var(--tw-text-opacity, 1))}.text-blue-500{--tw-text-opacity:1;color:rgb(59 130 246 / var(--tw-text-opacity, 1))}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.hover\:text-gray-200:hover{--tw-text-opacity:1;color:rgb(229 231 235 / var(--tw-text-opacity, 1))}.hover\:text-gray-800:hover{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.hover\:text-blue-800:hover{--tw-text-opacity:1;color:rgb(30 64 175 / var(--tw-text-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}@media (min-width: 640px){.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:text-2xl{font-size:1.5rem;line-height:2rem}}@media (min-width: 1024px){.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}}@media (min-width: 1280px){.xl\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}}</style></head>
-<body>
-    <div class="min-h-screen bg-gray-50">
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.16 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.container{width:100%}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px}}@media (min-width: 1536px){.container{max-width:1536px}}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.left-4{left:1rem}.top-0{top:0px}.top-1\/2{top:50%}.z-10{z-index:10}.z-40{z-index:40}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mr-2{margin-right:0.5rem}.mr-3{margin-right:0.75rem}.mt-1{margin-top:0.25rem}.mt-10{margin-top:2.5rem}.mt-2{margin-top:0.5rem}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-32{height:8rem}.max-h-40{max-height:10rem}.min-h-screen{min-height:100vh}.w-full{width:100%}.flex-1{flex:1 1 0%}.-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.overflow-auto{overflow:auto}.rounded-xl{border-radius:0.75rem}.rounded-2xl{border-radius:1rem}.border-t{border-top-width:1px}.border-gray-100{--tw-border-opacity:1;border-color:rgb(243 244 246 / var(--tw-border-opacity, 1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251 / var(--tw-bg-opacity, 1))}.bg-opacity-50{--tw-bg-opacity:0.5}.p-4{padding:1rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.pb-8{padding-bottom:2rem}.pl-10{padding-left:2.5rem}.pr-4{padding-right:1rem}.text-center{text-align:center}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-base{font-size:1rem;line-height:1.5rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-medium{font-weight:500}.uppercase{text-transform:uppercase}.text-gray-300{--tw-text-opacity:1;color:rgb(209 213 219 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.hover\:text-gray-700:hover{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}@media (min-width: 640px){.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}@media (min-width: 1024px){.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}}@media (min-width: 1280px){.xl\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}}</style></head>
+<body data-theme="light">
+    <div class="min-h-screen">
         <!-- Header -->
-        <header class="bg-blue-600 text-white py-3 px-4 shadow-md sticky top-0 z-10">
+        <header class="py-3 px-4 sticky top-0 z-10 header-elevated">
             <div class="container mx-auto flex justify-between items-center">
-                <h1 class="text-xl md:text-2xl font-bold">Locksuche</h1>
-                <div class="flex items-center space-x-3">
-                    <button id="toggleFiltersBtn" class="btn-secondary py-1 px-3 text-sm flex items-center" aria-expanded="true" aria-controls="filtersSection">
-                        <i class="fas fa-filter mr-2"></i>
-                        <span>Filter</span>
-                    </button>
-                    <button id="shareButton" class="btn-secondary py-1 px-3 text-sm flex items-center" aria-label="Teilen">
-                        <i class="fas fa-share-alt mr-2"></i>
-                        <span>Teilen</span>
+                <h1 class="text-xl font-medium">Locksuche</h1>
+                <div class="flex items-center space-x-2">
+                    <button id="themeToggleBtn" class="theme-toggle" aria-label="Erscheinungsbild wechseln" role="switch" aria-checked="false"></button>
+
+                    <button id="shareButton" class="btn-icon" aria-label="Teilen">
+                        <i class="fas fa-share-alt"></i>
                     </button>
                 </div>
             </div>
         </header>
 
         <!-- Main Content -->
-        <main class="container mx-auto py-6 px-4">
+        <main class="container mx-auto py-4 px-4">
             <!-- Tabs -->
-            <div class="flex border-b border-gray-200 mb-5">
-                <button id="allLocksTab" class="py-2 px-4 font-medium text-base tab-active" role="tab" aria-selected="true">Alle Locks</button>
-                <button id="favoriteLocksTab" class="py-2 px-4 font-medium text-base text-gray-600 hover:text-gray-800" role="tab" aria-selected="false">Meine Tierliste</button>
+            <div class="flex mb-4">
+                <button id="allLocksTab" class="py-2 px-4 font-medium text-sm tab-active flex-1 text-center" role="tab" aria-selected="true">Alle Locks</button>
+                <button id="favoriteLocksTab" class="py-2 px-4 font-medium text-sm text-gray-500 hover:text-gray-700 flex-1 text-center" role="tab" aria-selected="false">Meine Tierliste</button>
             </div>
             
             <!-- Search and Filters -->
             <div class="mb-6">
                 <!-- Search is always visible -->
-                <div class="relative w-full mb-3">
-                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                    <input type="text" id="searchInput" placeholder="Suche nach Locks..." class="search-input w-full py-2 pl-9 pr-3 focus:outline-none" aria-label="Suche nach Locks">
+                <div class="relative w-full mb-4">
+                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" id="searchInput" placeholder="Suche nach Locks..." class="search-input w-full py-3 pl-10 pr-4 focus:outline-none" aria-label="Suche nach Locks">
                 </div>
                 
                 <!-- Filters section that can be hidden -->
                 <div id="filtersSection" class="filters-section">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-                        <select id="interpreterFilter" class="search-input w-full py-2 px-3 focus:outline-none" aria-label="Interpret filtern"><option value="">Alle Interpreten</option><option value="Bayerische Leibgarde">Bayerische Leibgarde</option><option value="Brandenburgische Füsiliere">Brandenburgische Füsiliere</option><option value="Französische Musketiere">Französische Musketiere</option><option value="Kaiserliche Garde">Kaiserliche Garde</option><option value="Landsknechte von Basel">Landsknechte von Basel</option><option value="Preußische Grenadiere">Preußische Grenadiere</option><option value="Preußische Infanterie">Preußische Infanterie</option><option value="Sächsische Infanterie">Sächsische Infanterie</option></select>
-                        <select id="yearFilter" class="search-input w-full py-2 px-3 focus:outline-none" aria-label="Jahr filtern"><option value="">Alle Jahrgänge</option><option value="1522">1522</option><option value="1615">1615</option><option value="1680">1680</option><option value="1703">1703</option><option value="1742">1742</option><option value="1745">1745</option><option value="1756">1756</option><option value="1760">1760</option></select>
+                        <select id="interpreterFilter" class="filter-input w-full px-4 focus:outline-none" aria-label="Interpret filtern"><option value="">Alle Interpreten</option><option value="Bayerische Leibgarde">Bayerische Leibgarde</option><option value="Brandenburgische Füsiliere">Brandenburgische Füsiliere</option><option value="Französische Musketiere">Französische Musketiere</option><option value="Kaiserliche Garde">Kaiserliche Garde</option><option value="Landsknechte von Basel">Landsknechte von Basel</option><option value="Preußische Grenadiere">Preußische Grenadiere</option><option value="Preußische Infanterie">Preußische Infanterie</option><option value="Sächsische Infanterie">Sächsische Infanterie</option></select>
+                        <select id="yearFilter" class="filter-input w-full px-4 focus:outline-none" aria-label="Jahr filtern"><option value="">Alle Jahrgänge</option><option value="1522">1522</option><option value="1615">1615</option><option value="1680">1680</option><option value="1703">1703</option><option value="1742">1742</option><option value="1745">1745</option><option value="1756">1756</option><option value="1760">1760</option></select>
                     </div>
-                    <div class="flex flex-wrap gap-2 mb-3">
-                        <select id="categoryFilter" class="search-input py-2 px-3 focus:outline-none" aria-label="Kategorie filtern">
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <select id="categoryFilter" class="filter-input px-4 focus:outline-none" aria-label="Kategorie filtern">
                             <option value="">Alle Kategorien</option>
                             <option value="lock">Lock</option>
                             <option value="marsch">Marsch</option>
                         </select>
                         <div class="flex-1"></div>
                         <div class="flex items-center">
-                            <label for="sortOrder" class="mr-2 text-sm text-gray-600">Sortieren nach:</label>
-                            <select id="sortOrder" class="search-input py-1 px-2 text-sm focus:outline-none" aria-label="Sortieren nach">
-                                <option value="year">Jahr (aufsteigend)</option>
-                                <option value="year-desc">Jahr (absteigend)</option>
-                                <option value="interpreter">Interpret</option>
+                            <label for="sortOrder" class="mr-2 text-sm text-gray-500">Sortieren:</label>
+                            <select id="sortOrder" class="filter-input px-3 text-sm focus:outline-none" aria-label="Sortieren nach">
                                 <option value="name">Name</option>
+                                <option value="year">Jahr ↑</option>
+                                <option value="year-desc">Jahr ↓</option>
+                                <option value="interpreter">Interpret</option>
                             </select>
                         </div>
                     </div>
-                    <div class="flex flex-wrap gap-2" id="activeFilters"></div>
+                    <div class="flex flex-wrap gap-1 mb-2" id="activeFilters"></div>
                 </div>
             </div>
 
             <!-- Locks Grid -->
-            <div id="locksGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"><div class="lock-card bg-white p-4 rounded-lg shadow-md" data-lock-name="Alter Dessauer">
-                
-            </div>
+            <div id="locksGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"><div class="lock-card p-4 rounded-2xl" data-lock-name="Alter Dessauer">
+                </div>
             
             <!-- Empty State for Favorites -->
             <div id="emptyFavorites" class="hidden text-center py-10 fade-in">
-                <svg class="w-12 h-12 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                </svg>
-                <h3 class="mt-3 text-base font-medium">Keine Locks in deiner Tierliste</h3>
+                <i class="far fa-star text-gray-300 text-4xl mb-3"></i>
+                <h3 class="text-base font-medium">Keine Locks in deiner Tierliste</h3>
                 <p class="mt-1 text-sm text-gray-500">Füge Locks zu deiner Tierliste hinzu, indem du auf den Stern klickst.</p>
             </div>
             
             <!-- No Results State -->
             <div id="noResults" class="hidden text-center py-10 fade-in">
-                <svg class="w-12 h-12 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <h3 class="mt-3 text-base font-medium">Keine Locks gefunden</h3>
+                <i class="fas fa-search text-gray-300 text-4xl mb-3"></i>
+                <h3 class="text-base font-medium">Keine Locks gefunden</h3>
                 <p class="mt-1 text-sm text-gray-500">Versuche es mit einem anderen Suchbegriff oder Filter.</p>
             </div>
             
             <!-- Loading More Indicator -->
             <div id="loadingMore" class="hidden text-center py-6">
-                <div class="loading-wave">
-                    <span class="dot"></span>
-                    <span class="dot"></span>
+                <div class="loading-dots">
                     <span class="dot"></span>
                     <span class="dot"></span>
                     <span class="dot"></span>
                 </div>
-                <p class="text-sm text-gray-500 mt-2">Lade weitere Locks...</p>
+                <p class="text-xs text-gray-500 mt-2">Lade weitere Locks...</p>
             </div>
         </main>
 
-        <!-- Modal for Lock Details -->
-        <div id="lockModal" class="modal fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-50 flex items-center justify-center hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-            <div class="bg-white w-full max-w-2xl mx-4 rounded-lg shadow-lg overflow-hidden slide-in" style="">
-                <div class="bg-blue-600 text-white py-2 px-4 flex justify-between items-center">
-                    <h3 id="modalTitle" class="text-lg font-bold">Lock Details</h3>
+        <!-- Footer -->
+        <footer class="border-t border-gray-100 py-3 mt-10" style="border-color: var(--md-divider);">
+            <div class="container mx-auto px-4 text-center text-xs text-gray-500">
+                <p>© 2025 Locksuche</p>
+            </div>
+        </footer>
+
+        <!-- Modal for Lock Details (Bottom Sheet) -->
+        <div id="lockModalBackdrop" class="fixed inset-0 bg-black bg-opacity-50 z-40 scrim hidden"></div>
+        <div id="lockModal" class="bottom-sheet z-50" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div class="bottom-sheet-handle"></div>
+            <div class="px-5 pb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 id="modalTitle" class="text-xl font-medium">Lock Details</h3>
                     <div class="flex items-center">
                         <div id="modalActionMenu" class="action-menu mr-2">
-                            <button class="text-white hover:text-gray-200 focus:outline-none" aria-label="Aktionen anzeigen" aria-expanded="false" aria-haspopup="true">
+                            <button class="btn-icon" aria-label="Aktionen anzeigen" aria-expanded="false" aria-haspopup="true">
                                 <i class="fas fa-ellipsis-v"></i>
                             </button>
                             <div class="action-menu-content" role="menu">
@@ -414,88 +695,81 @@
                                 </div>
                             </div>
                         </div>
-                        <button id="closeModal" class="text-white hover:text-gray-200 focus:outline-none" aria-label="Schließen">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
+                        <button id="closeModal" class="btn-icon" aria-label="Schließen">
+                            <i class="fas fa-times"></i>
                         </button>
                     </div>
                 </div>
-                <div class="p-5">
-                    <div id="modalContent">
-                        <div class="mb-4">
-                            <div class="flex items-center mb-3">
-                                <h2 id="modalLockName" class="text-xl font-bold">AlternativText</h2>
-                            </div>
-                            <div class="flex flex-wrap gap-2 mb-3">
-                                <span id="modalInterpreter" class="badge badge-interpreter">Landsknechte</span>
-                                <span id="modalYear" class="badge badge-year">1990</span>
-                                <span id="modalCategory" class="badge badge-category">Lock</span>
-                            </div>
+                <div id="modalContent">
+                    <div class="mb-6">
+                        <div class="flex items-center mb-3">
+                            <h2 id="modalLockName" class="text-2xl font-medium">Alter Zapfenstreich</h2>
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div id="pfeiferstimmeDiv" class="hidden">
-                                <h4 class="text-sm font-bold mb-1">Pfeiferstimme</h4>
-                                <div id="modalPfeifer" class="bg-gray-50 p-3 rounded-lg font-mono text-xs overflow-auto max-h-40">C5 G4 C5 E5 | G5 E5 C5 G4 | A4 F4 A4 C5 | F5 C5 A4 F4</div>
-                            </div>
-                            <div id="trommelstimmeDiv" class="hidden">
-                                <h4 class="text-sm font-bold mb-1">Trommelstimme</h4>
-                                <div id="modalTrommel" class="bg-gray-50 p-3 rounded-lg font-mono text-xs overflow-auto max-h-40">RLLR RLLR | RLRL RLRL | RRLL RRLL | RLRR LRRL</div>
-                            </div>
+                        <div class="flex flex-wrap gap-2 mb-3">
+                            <span id="modalInterpreter" class="badge badge-interpreter">Kaiserliche Garde</span>
+                            <span id="modalYear" class="badge badge-year">1615</span>
+                            <span id="modalCategory" class="badge badge-category">Lock</span>
                         </div>
-                        <div class="mt-4 flex justify-between items-center">
-                            <button id="addToFavorites" class="favorite-button flex items-center gap-2 py-1.5 px-3 btn-secondary text-sm" aria-pressed="false">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
-                    </svg>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <h4 class="text-xs font-medium uppercase text-gray-500 mb-2">Pfeiferstimme</h4>
+                            <div id="modalPfeifer" class="bg-gray-50 p-4 rounded-xl font-mono text-sm overflow-auto max-h-40" style="background-color: var(--md-chip-bg); color: var(--md-on-surface);">C5 G4 C5 E5 | G5 E5 C5 G4 | A4 F4 A4 C5 | F5 C5 A4 F4</div>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-medium uppercase text-gray-500 mb-2">Trommelstimme</h4>
+                            <div id="modalTrommel" class="bg-gray-50 p-4 rounded-xl font-mono text-sm overflow-auto max-h-40" style="background-color: var(--md-chip-bg); color: var(--md-on-surface);">RLLR RLLR | RLRL RLRL | RRLL RRLL | RLRR LRRL</div>
+                        </div>
+                    </div>
+                    <div class="divider mb-6"></div>
+                    <div class="flex justify-between items-center">
+                        <button id="addToFavorites" class="btn-secondary flex items-center gap-2 py-2 px-4 text-sm" aria-pressed="false">
+                    <i class="far fa-star"></i>
                     <span>Zur Tierliste hinzufügen</span>
                 </button>
-                            <a id="jahrgangsLink" href="https://example.com/jahrgaenge/1615" target="_blank" class="py-1.5 px-3 btn-primary text-sm flex items-center" aria-label="Zum Jahrgang">
-                                <i class="fas fa-external-link-alt mr-2"></i>
-                                <span>Zum Jahrgang</span>
-                            </a>
-                        </div>
+                        <a id="jahrgangsLink" href="https://example.com/jahrgaenge/1615" target="_blank" class="py-2 px-4 btn-primary text-sm flex items-center" aria-label="Zum Jahrgang">
+                            <i class="fas fa-external-link-alt mr-2"></i>
+                            <span>Zum Jahrgang</span>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- Share Modal -->
-        <div id="shareModal" class="modal fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-50 flex items-center justify-center hidden" role="dialog" aria-modal="true" aria-labelledby="shareModalTitle">
-            <div class="bg-white w-full max-w-md mx-4 rounded-lg shadow-lg overflow-hidden slide-in">
-                <div class="bg-blue-600 text-white py-2 px-4 flex justify-between items-center">
-                    <h3 id="shareModalTitle" class="text-lg font-bold">Teilen</h3>
-                    <button id="closeShareModal" class="text-white hover:text-gray-200 focus:outline-none" aria-label="Schließen">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
+        <!-- Share Modal (Bottom Sheet) -->
+        <div id="shareModalBackdrop" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden scrim"></div>
+        <div id="shareModal" class="bottom-sheet z-50" role="dialog" aria-modal="true" aria-labelledby="shareModalTitle">
+            <div class="bottom-sheet-handle"></div>
+            <div class="px-5 pb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 id="shareModalTitle" class="text-xl font-medium">Teilen</h3>
+                    <button id="closeShareModal" class="btn-icon" aria-label="Schließen">
+                        <i class="fas fa-times"></i>
                     </button>
                 </div>
-                <div class="p-5">
-                    <p class="mb-4 text-sm">Teile diese Lock-Sammlung mit anderen:</p>
-                    <div class="flex flex-col space-y-3">
-                        <button class="btn-secondary py-2 px-4 flex items-center justify-center" id="copyLinkBtn">
-                            <i class="fas fa-link mr-2"></i>
-                            <span>Link kopieren</span>
-                        </button>
-                        <button class="btn-secondary py-2 px-4 flex items-center justify-center" id="shareWhatsAppBtn">
-                            <i class="fab fa-whatsapp mr-2 text-green-600"></i>
-                            <span>Via WhatsApp teilen</span>
-                        </button>
-                        <button class="btn-secondary py-2 px-4 flex items-center justify-center" id="shareEmailBtn">
-                            <i class="fas fa-envelope mr-2 text-blue-600"></i>
-                            <span>Via E-Mail teilen</span>
-                        </button>
-                    </div>
+                <p class="mb-6 text-sm text-gray-600" style="color: var(--md-on-surface-variant);">Teile diese Lock-Sammlung mit anderen:</p>
+                <div class="flex flex-col space-y-4">
+                    <button class="btn-secondary py-3 px-4 flex items-center justify-center rounded-xl action-option" id="copyLinkBtn">
+                        <i class="fas fa-link mr-3"></i>
+                        <span>Link kopieren</span>
+                    </button>
+                    <button class="btn-secondary py-3 px-4 flex items-center justify-center rounded-xl action-option" id="shareWhatsAppBtn">
+                        <i class="fab fa-whatsapp mr-3" style="color: #25D366;"></i>
+                        <span>Via WhatsApp teilen</span>
+                    </button>
+                    <button class="btn-secondary py-3 px-4 flex items-center justify-center rounded-xl action-option" id="shareEmailBtn">
+                        <i class="fas fa-envelope mr-3" style="color: var(--md-primary);"></i>
+                        <span>Via E-Mail teilen</span>
+                    </button>
                 </div>
             </div>
         </div>
         
         <!-- Toast Notification -->
-        <div id="toast" class="">
+        <div id="toast">
             <div class="flex items-center">
-                <i id="toastIcon" class="fas fa-info-circle mr-2 text-blue-500"></i>
-                <span id="toastMessage">Aus Tierliste entfernt</span>
+                <i id="toastIcon" class="fas fa-check-circle mr-2"></i>
+                <span id="toastMessage">Erfolgreich geteilt!</span>
             </div>
         </div>
     </div>
@@ -5724,7 +5998,6 @@
         "id": 451
     }
 ];
-        
 
         // Utility functions
         function debounce(func, wait) {
@@ -5744,6 +6017,7 @@
         const categoryFilter = document.getElementById('categoryFilter');
         const sortOrder = document.getElementById('sortOrder');
         const lockModal = document.getElementById('lockModal');
+        const lockModalBackdrop = document.getElementById('lockModalBackdrop');
         const closeModal = document.getElementById('closeModal');
         const modalTitle = document.getElementById('modalTitle');
         const modalLockName = document.getElementById('modalLockName');
@@ -5752,7 +6026,6 @@
         const modalCategory = document.getElementById('modalCategory');
         const modalPfeifer = document.getElementById('modalPfeifer');
         const modalTrommel = document.getElementById('modalTrommel');
-        const modalYearLogo = document.getElementById('modalYearLogo');
         const addToFavorites = document.getElementById('addToFavorites');
         const jahrgangsLink = document.getElementById('jahrgangsLink');
         const allLocksTab = document.getElementById('allLocksTab');
@@ -5769,35 +6042,56 @@
         const modalShare = document.getElementById('modalShare');
         const modalCopy = document.getElementById('modalCopy');
         const modalActionMenu = document.getElementById('modalActionMenu');
-        const modalPDiv = document.getElementById("pfeiferstimmeDiv");
-        const modalTDiv = document.getElementById("trommelstimmeDiv");
         const shareButton = document.getElementById('shareButton');
         const shareModal = document.getElementById('shareModal');
+        const shareModalBackdrop = document.getElementById('shareModalBackdrop');
         const closeShareModal = document.getElementById('closeShareModal');
         const copyLinkBtn = document.getElementById('copyLinkBtn');
         const shareWhatsAppBtn = document.getElementById('shareWhatsAppBtn');
         const shareEmailBtn = document.getElementById('shareEmailBtn');
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
 
         // State
         let currentLock = null;
         let showingFavorites = false;
         let favorites = JSON.parse(localStorage.getItem('favoriteLocks') || '[]');
         let currentPage = 1;
-        let itemsPerPage = 50; // For pagination
+        let itemsPerPage = 20; // For pagination
         let filteredLocks = []; // Store filtered results for pagination
         let isFiltering = false; // Flag to track if filtering is in progress
         let activeFiltersList = []; // Track active filters for UI
         let isFiltersVisible = true; // Track filter visibility
+        let currentTheme = localStorage.getItem('theme') || 'light'; // Theme state
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', () => {
+            // Apply saved theme
+            applyTheme(currentTheme);
+            
             populateFilters();
             renderLocks();
             setupEventListeners();
         });
 
+        // Apply theme to document
+        function applyTheme(theme) {
+            document.body.setAttribute('data-theme', theme);
+            themeToggleBtn.setAttribute('aria-checked', theme === 'dark');
+            currentTheme = theme;
+            localStorage.setItem('theme', theme);
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            applyTheme(newTheme);
+        }
+
         // Setup all event listeners
         function setupEventListeners() {
+            // Theme toggle
+            themeToggleBtn.addEventListener('click', toggleTheme);
+            
             // Search and filter events
             searchInput.addEventListener('input', debounce(handleSearch, 300));
             interpreterFilter.addEventListener('change', handleFilterChange);
@@ -5811,7 +6105,7 @@
             
             // Modal events
             closeModal.addEventListener('click', closeModalWithAnimation);
-            lockModal.addEventListener('click', handleModalOutsideClick);
+            lockModalBackdrop.addEventListener('click', closeModalWithAnimation);
             addToFavorites.addEventListener('click', handleModalFavoriteClick);
             
             // Action menu
@@ -5823,13 +6117,10 @@
             // Share modal
             shareButton.addEventListener('click', openShareModal);
             closeShareModal.addEventListener('click', closeShareModalWithAnimation);
-            shareModal.addEventListener('click', handleShareModalOutsideClick);
+            shareModalBackdrop.addEventListener('click', closeShareModalWithAnimation);
             copyLinkBtn.addEventListener('click', handleCopyLink);
             shareWhatsAppBtn.addEventListener('click', handleShareWhatsApp);
             shareEmailBtn.addEventListener('click', handleShareEmail);
-            
-            // Toggle filters
-            toggleFiltersBtn.addEventListener('click', toggleFilters);
             
             // Event delegation for locks grid
             locksGrid.addEventListener('click', handleLocksGridClick);
@@ -5839,16 +6130,58 @@
             
             // Keyboard navigation
             document.addEventListener('keydown', handleKeyDown);
+            
+            // Bottom sheet touch events
+            setupBottomSheetDrag(lockModal);
+            setupBottomSheetDrag(shareModal);
+        }
+        
+        // Setup bottom sheet drag behavior
+        function setupBottomSheetDrag(sheet) {
+            let startY;
+            let startTranslate;
+            let currentTranslate = 0;
+            
+            const handle = sheet.querySelector('.bottom-sheet-handle');
+            
+            handle.addEventListener('touchstart', function(e) {
+                startY = e.touches[0].clientY;
+                startTranslate = currentTranslate;
+                sheet.style.transition = 'none';
+            });
+            
+            handle.addEventListener('touchmove', function(e) {
+                const deltaY = e.touches[0].clientY - startY;
+                currentTranslate = Math.max(0, startTranslate + deltaY);
+                sheet.style.transform = `translateY(${currentTranslate}px)`;
+            });
+            
+            handle.addEventListener('touchend', function() {
+                sheet.style.transition = 'transform 0.3s ease';
+                if (currentTranslate > 100) {
+                    // Close the sheet if dragged down enough
+                    if (sheet === lockModal) {
+                        closeModalWithAnimation();
+                    } else if (sheet === shareModal) {
+                        closeShareModalWithAnimation();
+                    }
+                    currentTranslate = 0;
+                } else {
+                    // Snap back to fully open
+                    sheet.style.transform = 'translateY(0)';
+                    currentTranslate = 0;
+                }
+            });
         }
 
         // Handle keyboard navigation
         function handleKeyDown(e) {
             // Close modal with Escape key
             if (e.key === 'Escape') {
-                if (lockModal.classList.contains('hidden') === false) {
+                if (!lockModal.classList.contains('hidden') && lockModal.classList.contains('show')) {
                     closeModalWithAnimation();
                 }
-                if (shareModal.classList.contains('hidden') === false) {
+                if (!shareModal.classList.contains('hidden') && shareModal.classList.contains('show')) {
                     closeShareModalWithAnimation();
                 }
                 
@@ -5907,30 +6240,16 @@
 
         // Open share modal
         function openShareModal() {
-            shareModal.classList.remove('hidden');
+            shareModalBackdrop.classList.remove('hidden');
+            shareModal.classList.add('show');
         }
 
         // Close share modal with animation
         function closeShareModalWithAnimation() {
-            const modalContent = shareModal.querySelector('.bg-white');
-            
-            // Add closing animation
-            modalContent.style.transform = 'translateY(20px)';
-            modalContent.style.opacity = '0';
-            
+            shareModal.classList.remove('show');
             setTimeout(() => {
-                shareModal.classList.add('hidden');
-                // Reset transform for next opening
-                modalContent.style.transform = '';
-                modalContent.style.opacity = '';
+                shareModalBackdrop.classList.add('hidden');
             }, 300);
-        }
-
-        // Handle share modal outside click
-        function handleShareModalOutsideClick(e) {
-            if (e.target === shareModal) {
-                closeShareModalWithAnimation();
-            }
         }
 
         // Handle copy link
@@ -5947,7 +6266,19 @@
         // Handle share via WhatsApp
         function handleShareWhatsApp() {
             const url = encodeURIComponent(window.location.href);
-            const text = encodeURIComponent('Schau dir diese historische Locks-Sammlung an!');
+            const textToCopy = `
+                ${currentLock.name}
+                Interpret: ${currentLock.interpret}
+                Jahr: ${currentLock.jahr}
+                Kategorie: ${currentLock.category === 'lock' ? 'Lock' : 'Marsch'}
+                
+                Pfeiferstimme:
+                ${currentLock.pfeiferstimme}
+                
+                Trommelstimme:
+                ${currentLock.trommelstimme}
+            `.trim();
+            const text = textToCopy;
             const whatsappUrl = `https://wa.me/?text=${text}%20${url}`;
             window.open(whatsappUrl, '_blank');
             closeShareModalWithAnimation();
@@ -6139,35 +6470,16 @@
                     handleFilterChange();
                 });
             }
-            
-            if (sortOrder.value !== 'year') {
-                let sortText = '';
-                switch(sortOrder.value) {
-                    case 'name':
-                        sortText = 'Name';
-                        break;
-                    case 'year-desc':
-                        sortText = 'Jahr (absteigend)';
-                        break;
-                    case 'interpreter':
-                        sortText = 'Interpret';
-                        break;
-                }
-                addActiveFilter('Sortierung: ' + sortText, () => {
-                    sortOrder.value = 'year';
-                    handleSortChange();
-                });
-            }
         }
 
         // Add active filter pill to UI
         function addActiveFilter(text, removeCallback) {
             const pill = document.createElement('div');
-            pill.className = 'bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full flex items-center';
+            pill.className = 'chip active';
             pill.innerHTML = `
                 <span>${text}</span>
-                <button class="ml-1 text-blue-600 hover:text-blue-800 focus:outline-none" aria-label="Filter entfernen">
-                    <i class="fas fa-times-circle"></i>
+                <button class="close ml-1" aria-label="Filter entfernen" style="color: var(--md-primary);">
+                    <i class="fas fa-times"></i>
                 </button>
             `;
             
@@ -6177,20 +6489,7 @@
             activeFiltersList.push({ text, removeCallback });
         }
 
-        // Toggle filters visibility
-        function toggleFilters() {
-            isFiltersVisible = !isFiltersVisible;
-            
-            if (isFiltersVisible) {
-                filtersSection.style.maxHeight = filtersSection.scrollHeight + 'px';
-                filtersSection.style.opacity = '1';
-                toggleFiltersBtn.setAttribute('aria-expanded', 'true');
-            } else {
-                filtersSection.style.maxHeight = '0';
-                filtersSection.style.opacity = '0';
-                toggleFiltersBtn.setAttribute('aria-expanded', 'false');
-            }
-        }
+        
 
         // Handle search input changes
         function handleSearch() {
@@ -6223,6 +6522,7 @@
                 allLocksTab.classList.add('tab-active');
                 allLocksTab.setAttribute('aria-selected', 'true');
                 favoriteLocksTab.classList.remove('tab-active');
+                favoriteLocksTab.classList.add('text-gray-500');
                 favoriteLocksTab.setAttribute('aria-selected', 'false');
                 currentPage = 1;
                 renderLocks();
@@ -6234,6 +6534,7 @@
             if (!showingFavorites) {
                 showingFavorites = true;
                 favoriteLocksTab.classList.add('tab-active');
+                favoriteLocksTab.classList.remove('text-gray-500');
                 favoriteLocksTab.setAttribute('aria-selected', 'true');
                 allLocksTab.classList.remove('tab-active');
                 allLocksTab.setAttribute('aria-selected', 'false');
@@ -6246,10 +6547,10 @@
         function renderLocks() {
             // Show loading state
             locksGrid.innerHTML = `
-                <div class="bg-white p-4 rounded-lg shadow animate-pulse h-40"></div>
-                <div class="bg-white p-4 rounded-lg shadow animate-pulse h-40"></div>
-                <div class="bg-white p-4 rounded-lg shadow animate-pulse h-40"></div>
-                <div class="bg-white p-4 rounded-lg shadow animate-pulse h-40"></div>
+                <div class="skeleton h-32"></div>
+                <div class="skeleton h-32"></div>
+                <div class="skeleton h-32"></div>
+                <div class="skeleton h-32"></div>
             `;
             
             // Hide empty states
@@ -6313,18 +6614,16 @@
         // Create a lock card element
         function createLockCard(lock) {
             const card = document.createElement('div');
-            card.className = 'lock-card bg-white p-4 rounded-lg shadow-md';
+            card.className = 'lock-card p-4 rounded-2xl';
             card.dataset.lockName = lock.name;
             
             const isFavorite = isInFavorites(lock.name);
             
             card.innerHTML = `
-                <div class="flex justify-between items-start mb-2">
-                    <div class="flex items-center">
-                        <h3 class="font-bold text-gray-900">${lock.name}</h3>
-                    </div>
+                <div class="flex justify-between items-start mb-3">
+                    <h3 class="font-medium">${lock.name}</h3>
                     <button class="favorite-button ${isFavorite ? 'active' : ''}" aria-label="${isFavorite ? 'Aus Tierliste entfernen' : 'Zur Tierliste hinzufügen'}" aria-pressed="${isFavorite}">
-                        <i class="fas fa-star"></i>
+                        <i class="${isFavorite ? 'fas' : 'far'} fa-star"></i>
                     </button>
                 </div>
                 <div class="mb-3">
@@ -6337,7 +6636,7 @@
                             ${lock.category === 'lock' ? 'Lock' : 'Marsch'}
                         </span>
                     </div>
-                    <button class="text-blue-600 hover:text-blue-800 text-sm font-medium" aria-label="Details anzeigen">
+                    <button class="btn-text text-xs" aria-label="Details anzeigen">
                         Details
                     </button>
                 </div>
@@ -6380,6 +6679,7 @@
                 button.classList.remove('active');
                 button.setAttribute('aria-pressed', 'false');
                 button.setAttribute('aria-label', 'Zur Tierliste hinzufügen');
+                button.innerHTML = '<i class="far fa-star"></i>';
                 
                 // If we're on the favorites tab, we might need to re-render
                 if (showingFavorites) {
@@ -6393,6 +6693,7 @@
                 button.classList.add('active');
                 button.setAttribute('aria-pressed', 'true');
                 button.setAttribute('aria-label', 'Aus Tierliste entfernen');
+                button.innerHTML = '<i class="fas fa-star"></i>';
                 
                 showToast('Zur Tierliste hinzugefügt', 'check');
             }
@@ -6411,26 +6712,22 @@
             modalInterpreter.textContent = lock.interpret;
             modalYear.textContent = lock.jahr;
             modalCategory.textContent = lock.category === 'lock' ? 'Lock' : 'Marsch';
-            modalPfeifer.textContent = lock.pfeiferstimme;
-            modalTrommel.textContent = lock.trommelstimme;
+            modalPfeifer.innerHTML = '<p>'+lock.pfeiferstimme+'</p>';
+            modalTrommel.innerHTML = '<p>'+lock.trommelstimme+'</p>';
             
             // Set favorite button state
             const isFavorite = isInFavorites(lock.name);
             if (isFavorite) {
                 addToFavorites.classList.add('active');
                 addToFavorites.innerHTML = `
-                    <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                    </svg>
+                    <i class="fas fa-star"></i>
                     <span>Aus Tierliste entfernen</span>
                 `;
                 addToFavorites.setAttribute('aria-pressed', 'true');
             } else {
                 addToFavorites.classList.remove('active');
                 addToFavorites.innerHTML = `
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
-                    </svg>
+                    <i class="far fa-star"></i>
                     <span>Zur Tierliste hinzufügen</span>
                 `;
                 addToFavorites.setAttribute('aria-pressed', 'false');
@@ -6439,42 +6736,26 @@
             // Set jahrganglink
             jahrgangsLink.href = `https://example.com/jahrgaenge/${lock.jahr}`;
             
-            if(lock.trommelstimme !=null && lock.trommelstimme.replace(" ", "") != ''){
-                modalTDiv.classList.remove('hidden');
-            }else{
-                modalTDiv.classList.add('hidden');
-            }
-
-            if(lock.pfeiferstimme !=null && lock.pfeiferstimme.replace(" ", "") != ''){
-                modalPDiv.classList.remove('hidden');
-            }else{
-                modalPDiv.classList.add('hidden');
-            }
             // Show modal
-            lockModal.classList.remove('hidden');
+            lockModalBackdrop.classList.remove('hidden');
+            lockModal.classList.add('show');
         }
 
         // Close modal with animation
         function closeModalWithAnimation() {
-            const modalContent = lockModal.querySelector('.bg-white');
+            lockModal.classList.remove('show');
             
-            // Add closing animation
-            modalContent.style.transform = 'translateY(20px)';
-            modalContent.style.opacity = '0';
+            // Also close share modal if it's open
+            if (shareModal.classList.contains('show')) {
+                shareModal.classList.remove('show');
+                setTimeout(() => {
+                    shareModalBackdrop.classList.add('hidden');
+                }, 300);
+            }
             
             setTimeout(() => {
-                lockModal.classList.add('hidden');
-                // Reset transform for next opening
-                modalContent.style.transform = '';
-                modalContent.style.opacity = '';
+                lockModalBackdrop.classList.add('hidden');
             }, 300);
-        }
-
-        // Handle clicks outside the modal to close it
-        function handleModalOutsideClick(e) {
-            if (e.target === lockModal) {
-                closeModalWithAnimation();
-            }
         }
 
         // Handle favorite button click in the modal
@@ -6488,9 +6769,7 @@
                 favorites = favorites.filter(name => name !== currentLock.name);
                 addToFavorites.classList.remove('active');
                 addToFavorites.innerHTML = `
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
-                    </svg>
+                    <i class="far fa-star"></i>
                     <span>Zur Tierliste hinzufügen</span>
                 `;
                 addToFavorites.setAttribute('aria-pressed', 'false');
@@ -6501,9 +6780,7 @@
                 favorites.push(currentLock.name);
                 addToFavorites.classList.add('active');
                 addToFavorites.innerHTML = `
-                    <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                    </svg>
+                    <i class="fas fa-star"></i>
                     <span>Aus Tierliste entfernen</span>
                 `;
                 addToFavorites.setAttribute('aria-pressed', 'true');
@@ -6522,10 +6799,12 @@
                     favoriteButton.classList.add('active');
                     favoriteButton.setAttribute('aria-pressed', 'true');
                     favoriteButton.setAttribute('aria-label', 'Aus Tierliste entfernen');
+                    favoriteButton.innerHTML = '<i class="fas fa-star"></i>';
                 } else {
                     favoriteButton.classList.remove('active');
                     favoriteButton.setAttribute('aria-pressed', 'false');
                     favoriteButton.setAttribute('aria-label', 'Zur Tierliste hinzufügen');
+                    favoriteButton.innerHTML = '<i class="far fa-star"></i>';
                 }
             }
             
@@ -6542,11 +6821,11 @@
             toastMessage.textContent = message;
             
             if (type === 'check') {
-                toastIcon.className = 'fas fa-check-circle mr-2 text-green-500';
+                toastIcon.className = 'fas fa-check-circle mr-2';
             } else if (type === 'error') {
-                toastIcon.className = 'fas fa-exclamation-circle mr-2 text-red-500';
+                toastIcon.className = 'fas fa-exclamation-circle mr-2';
             } else if (type === 'info') {
-                toastIcon.className = 'fas fa-info-circle mr-2 text-blue-500';
+                toastIcon.className = 'fas fa-info-circle mr-2';
             }
             
             // Show the toast
@@ -6557,14 +6836,7 @@
                 toast.className = toast.className.replace('show', '');
             }, 3000);
         }
-
-        async function getData() {
-            const res = await fetch("./data.json");
-            const data = await res.json();
-
-            return data;
-        }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'95044d2c468f6a83',t:'MTc1MDAxMzkzMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'950d8743d3fff5d3',t:'MTc1MDExMDY4NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe>
 
 </body></html>
