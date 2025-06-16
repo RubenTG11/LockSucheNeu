@@ -712,11 +712,11 @@
                         </div>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <div>
+                        <div id="modalPfeiferWrap">
                             <h4 class="text-xs font-medium uppercase text-gray-500 mb-2">Pfeiferstimme</h4>
                             <div id="modalPfeifer" class="bg-gray-50 p-4 rounded-xl font-mono text-sm overflow-auto max-h-40" style="background-color: var(--md-chip-bg); color: var(--md-on-surface);">C5 G4 C5 E5 | G5 E5 C5 G4 | A4 F4 A4 C5 | F5 C5 A4 F4</div>
                         </div>
-                        <div>
+                        <div id="modalTrommelWrap">
                             <h4 class="text-xs font-medium uppercase text-gray-500 mb-2">Trommelstimme</h4>
                             <div id="modalTrommel" class="bg-gray-50 p-4 rounded-xl font-mono text-sm overflow-auto max-h-40" style="background-color: var(--md-chip-bg); color: var(--md-on-surface);">RLLR RLLR | RLRL RLRL | RRLL RRLL | RLRR LRRL</div>
                         </div>
@@ -6026,6 +6026,8 @@
         const modalCategory = document.getElementById('modalCategory');
         const modalPfeifer = document.getElementById('modalPfeifer');
         const modalTrommel = document.getElementById('modalTrommel');
+        const modalPfeiferWrap = document.getElementById('modalPfeiferWrap');
+        const modalTrommelWrap = document.getElementById('modalTrommelWrap');
         const addToFavorites = document.getElementById('addToFavorites');
         const jahrgangsLink = document.getElementById('jahrgangsLink');
         const allLocksTab = document.getElementById('allLocksTab');
@@ -6736,6 +6738,17 @@
             // Set jahrganglink
             jahrgangsLink.href = `https://example.com/jahrgaenge/${lock.jahr}`;
             
+            if(lock.pfeiferstimme != '' && lock.pfeiferstimme != null){
+                modalPfeiferWrap.classList.remove('hidden');
+            }else{
+                modalPfeiferWrap.classList.add('hidden');
+            }
+
+            if(lock.trommelstimme != '' && lock.trommelstimme != null){
+                modalTrommelWrap.classList.remove('hidden');
+            }else{
+                modalTrommelWrap.classList.add('hidden');
+            }
             // Show modal
             lockModalBackdrop.classList.remove('hidden');
             lockModal.classList.add('show');
